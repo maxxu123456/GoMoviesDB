@@ -1,29 +1,26 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { data, Link } from "react-router-dom";
 
 const Movies = () => {
     const [movies, setMovies] = useState([])
 
     useEffect(() => {
-        let moviesList = [
-            {
-                id: 1,
-                title: "Interstellar",
-                release_date: "2019-01-01",
-                runtime: 200,
-                mpaa_rating: "R",
-                description: "GOAT Movie"
-            },
-            {
-                id: 1,
-                title: "Star Wars",
-                release_date: "1983-01-01",
-                runtime: 150,
-                mpaa_rating: "PG-13",
-                description: "Great movies"
-            }
-        ]
-        setMovies(moviesList)
+
+        const headers = new Headers()
+        headers.append("Content-Type", "application/json")
+
+        const requestOptions = {
+            method: "GET",
+            headers: headers,
+        }
+        fetch(`http://localhost:8080/movies`, requestOptions)
+            .then((res) => res.json())
+            .then((data) => {
+                setMovies(data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
 
     }, [])
     return (
