@@ -1,11 +1,9 @@
 package main
 
 import (
-	"backend/internal/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 )
 
 func (app *application) Home(w http.ResponseWriter, r *http.Request) {
@@ -30,36 +28,12 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) AllMovies(w http.ResponseWriter, r *http.Request) {
-	var movies []models.Movie
+	movies, err := app.DB.AllMovies()
 
-	rd, _ := time.Parse("2006-01-02", "2006-01-02")
-
-	interstellar := models.Movie{
-		ID:          1,
-		Title:       "Interstellar",
-		ReleaseDate: rd,
-		MPAARating:  "R",
-		RunTime:     116,
-		Description: "A very nice movie",
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
-	movies = append(movies, interstellar)
-
-	rd, _ = time.Parse("2006-01-02", "2001-01-08")
-
-	chicago := models.Movie{
-		ID:          2,
-		Title:       "Chicago",
-		ReleaseDate: rd,
-		MPAARating:  "R",
-		RunTime:     110,
-		Description: "A very nice movie in chicago",
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}
-
-	movies = append(movies, chicago)
 
 	out, err := json.Marshal(movies)
 	if err != nil {
