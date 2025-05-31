@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -21,11 +22,15 @@ type application struct {
 	JWTIssuer    string
 	JWTAudience  string
 	CookieDomain string
+	logger       *log.Logger
 }
 
 func main() {
 
 	var app application
+
+	// Initialize logger
+	app.logger = log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile)
 
 	flag.StringVar(&app.DSN, "dsn", "host=localhost port=5432 user=postgres password=postgres dbname=movies sslmode=disable timezone=UTC connect_timeout=5", "Postgres connection string")
 	flag.StringVar(&app.JWTSecret, "jwt-secret", "verysecretestring:)", "signing secret")
