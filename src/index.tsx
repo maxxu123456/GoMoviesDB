@@ -10,7 +10,7 @@ import EditMovie from './Components/EditMovie';
 import ManageCatalogue from './Components/ManageCatalogue';
 import GraphQL from './Components/GraphQL';
 import Login from './Components/Login';
-import Movie from './Components/Movie';
+import MovieComponent from './Components/Movie';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/movies/:id",
-        element: <Movie />
+        element: <MovieComponent />
       },
       {
         path: "/genres",
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
   }
 ])
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />

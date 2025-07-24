@@ -1,19 +1,17 @@
 import { useState } from "react";
 import Input from "./form/input";
-import { useNavigate, useOutlet, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../App";
 
 const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const { setJwtToken } = useOutletContext()
-    const { setAlertClassName } = useOutletContext()
-    const { setAlertMessage } = useOutletContext()
-    const { toggleRefresh } = useOutletContext()
+    const { setJwtToken, setAlertClassName, setAlertMessage, toggleRefresh } = useAppContext();
 
     const navigate = useNavigate()
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         //build request payload
@@ -22,7 +20,7 @@ const Login = () => {
             password: password,
         }
 
-        const requestOptions = {
+        const requestOptions: RequestInit = {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -52,8 +50,8 @@ const Login = () => {
             <hr />
 
             <form onSubmit={handleSubmit}>
-                <Input title="Email Address" type="email" className="form-control" name="email" autoComplete="email-new" onChange={(event) => { setEmail(event.target.value) }} />
-                <Input title="Password" type="password" className="form-control" name="password" autoComplete="password-new" onChange={(event) => { setPassword(event.target.value) }} />
+                <Input title="Email Address" type="email" className="form-control" name="email" autoComplete="email-new" onChange={(event) => { setEmail(event.target.value) }} value={email} />
+                <Input title="Password" type="password" className="form-control" name="password" autoComplete="password-new" onChange={(event) => { setPassword(event.target.value) }} value={password} />
 
                 <hr />
                 <input type="submit" className="btn btn-primary" value="Login"></input>

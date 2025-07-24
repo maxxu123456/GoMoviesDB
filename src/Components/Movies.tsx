@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import { data, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Movie } from "../types/models";
 
 const Movies = () => {
-    const [movies, setMovies] = useState([])
+    const [movies, setMovies] = useState<Movie[]>([])
 
     useEffect(() => {
 
         const headers = new Headers()
         headers.append("Content-Type", "application/json")
 
-        const requestOptions = {
+        const requestOptions: RequestInit = {
             method: "GET",
             headers: headers,
         }
@@ -45,10 +46,10 @@ const Movies = () => {
                                 </Link>
                             </td>
                             <td>
-                                <Link>{movie.release_date}</Link>
+                                {movie.release_date}
                             </td>
                             <td>
-                                <Link>{movie.mpaa_rating}</Link>
+                                {movie.mpaa_rating}
                             </td>
                         </tr>
                     })}

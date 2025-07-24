@@ -1,18 +1,26 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import Home from "./Components/Home"
+import { Link, Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import Alert from "./Components/Alert";
+
+interface AppContext {
+  jwtToken: string;
+  setJwtToken: (token: string) => void;
+  setAlertClassName: (className: string) => void;
+  setAlertMessage: (message: string) => void;
+  toggleRefresh: (status: boolean) => void;
+}
+
 function App() {
   const [jwtToken, setJwtToken] = useState("")
   const [alertMessage, setAlertMessage] = useState("")
   const [alertClassName, setAlertClassName] = useState("d-none")
 
-  const [tickInterval, setTickInterval] = useState()
+  const [tickInterval, setTickInterval] = useState<NodeJS.Timeout>()
 
 
   const navigate = useNavigate()
   const logout = () => {
-    const requestOptions = {
+    const requestOptions: RequestInit = {
       method: "GET",
       credentials: "include"
     }
@@ -27,14 +35,14 @@ function App() {
     navigate("/login")
   }
 
-  const toggleRefresh = useCallback((status) => {
+  const toggleRefresh = useCallback((status: boolean) => {
     console.log("clicked")
 
     if (status) {
       console.log("turning on ticking")
       let i = setInterval(() => {
         console.log("This will run every second")
-        const requestOptions = {
+        const requestOptions: RequestInit = {
           method: "GET",
           credentials: "include"
         }
@@ -54,14 +62,16 @@ function App() {
     } else {
       console.log("turning off ticking")
       console.log("turning off tickInterval", tickInterval)
-      setTickInterval(null)
-      clearInterval(tickInterval)
+      if (tickInterval) {
+        clearInterval(tickInterval)
+      }
+      setTickInterval(undefined)
     }
   }, [tickInterval])
 
   useEffect(() => {
     if ((jwtToken) === "") {
-      const requestOptions = {
+      const requestOptions: RequestInit = {
         method: "GET",
         credentials: "include"
       }
@@ -117,13 +127,15 @@ function App() {
         </div>
         <div className="col-md-10">
           <Alert message={alertMessage} className={alertClassName} />
-          <Outlet context={
-            { jwtToken, setJwtToken, setAlertClassName, setAlertMessage, toggleRefresh }
-          }></Outlet>
+          <Outlet context={{ jwtToken, setJwtToken, setAlertClassName, setAlertMessage, toggleRefresh }} />
         </div>
       </div>
     </div>
   );
+}
+
+export function useAppContext() {
+  return useOutletContext<AppContext>();
 }
 
 export default App;

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { data, Link, useNavigate, useOutletContext } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Movie } from "../types/models";
+import { useAppContext } from "../App";
 
 const ManageCatalogue = () => {
-    const [movies, setMovies] = useState([])
-    const { jwtToken } = useOutletContext()
+    const [movies, setMovies] = useState<Movie[]>([])
+    const { jwtToken } = useAppContext();
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -16,7 +18,7 @@ const ManageCatalogue = () => {
         headers.append("Content-Type", "application/json")
         headers.append("Authorization", "Bearer " + jwtToken)
 
-        const requestOptions = {
+        const requestOptions: RequestInit = {
             method: "GET",
             headers: headers,
         }
@@ -47,15 +49,15 @@ const ManageCatalogue = () => {
                     {movies.map((movie) => {
                         return <tr key={movie.id}>
                             <td>
-                                <Link to={`/admin/movies/${movie.id}`}>
+                                <Link to={`/admin/movie/${movie.id}`}>
                                     {movie.title}
                                 </Link>
                             </td>
                             <td>
-                                <Link>{movie.release_date}</Link>
+                                {movie.release_date}
                             </td>
                             <td>
-                                <Link>{movie.mpaa_rating}</Link>
+                                {movie.mpaa_rating}
                             </td>
                         </tr>
                     })}

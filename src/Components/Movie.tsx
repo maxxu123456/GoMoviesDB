@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import type { Movie } from "../types/models";
 
-const Movie = () => {
-    const [movie, setMovie] = useState({})
+const MovieComponent = () => {
+    const [movie, setMovie] = useState<Movie | null>(null);
 
     let { id } = useParams()
 
     useEffect(() => {
-        let myMovie = {
+        let myMovie: Movie = {
             id: 1,
             title: "Interstellar",
             release_date: "2019-01-01",
-            runtime: 200,
+            runtime: "200",
             mpaa_rating: "R",
             description: "GOAT Movie"
         }
         setMovie(myMovie)
     }, [id])
+
+    if (!movie) {
+        return <div>Loading...</div>
+    }
+
     return (
         <div className="text-center">
             <h2>Movie: {movie.title}</h2>
@@ -31,4 +37,4 @@ const Movie = () => {
 
     )
 }
-export default Movie;
+export default MovieComponent;

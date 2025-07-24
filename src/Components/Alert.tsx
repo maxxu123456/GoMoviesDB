@@ -1,4 +1,9 @@
-function Alert(props) {
+interface AlertProps {
+    className: string;
+    message: string;
+}
+
+function Alert(props: AlertProps) {
     return (
         <div className={"alert " + props.className} role="alert">
             {props.message}
@@ -6,4 +11,4 @@ function Alert(props) {
     )
 }
 
-export default Alert
+export default Alert;
